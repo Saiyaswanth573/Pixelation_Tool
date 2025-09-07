@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pixelation Game</title>
+    <!-- Load Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        /* This is the key to making the upscaled image look pixelated and not blurry */
+        .pixelated-image {
+            image-rendering: pixelated;
+        }
+    </style>
+</head>
+<body class="bg-gray-900 text-gray-100 font-sans min-h-screen flex items-center justify-center p-4">
+
+    <div class="bg-gray-800 rounded-2xl shadow-2xl p-8 max-w-4xl w-full">
+        <!-- Game Title and Rules -->
+        <div class="text-center mb-8">
+            <h1 class="text-4xl font-extrabold text-blue-400 mb-2">Guess the Personality</h1>
+            <p class="text-lg text-gray-400">A fun and challenging pixelation quiz.</p>
+        </div>
+
+        <div class="mb-8">
+            <h2 class="text-2xl font-bold mb-2 text-gray-200">Rules & Scoring</h2>
+            <ul class="list-disc list-inside text-gray-300 space-y-2">
+                <li>Total of 15 questions in the round.</li>
+                <li>Each image starts at a high pixelation level.</li>
+                <li>Players have 30 seconds to buzz in.</li>
+                <li>If both teams fail to answer, the pixelation is reduced.</li>
+                <li><span class="font-bold text-green-400">10 Points:</span> 75% pixelated</li>
+                <li><span class="font-bold text-yellow-400">8 Points:</span> 50% pixelated</li>
+                <li><span class="font-bold text-red-400">5 Points:</span> 25% pixelated</li>
+            </ul>
+        </div>
+
+        <!-- Image and Controls -->
+        <div class="flex flex-col items-center justify-center gap-6">
+
+            <!-- Image Container -->
+            <div class="w-full max-w-md h-96 bg-gray-700 rounded-xl overflow-hidden shadow-inner flex items-center justify-center">
+                <img id="gameImage" class="pixelated-image w-full h-full object-contain" src="" alt="Quiz Image">
+            </div>
+
+            <!-- Pixelation Control Buttons -->
+            <div class="w-full max-w-md flex justify-center gap-4">
+                <button id="pixelate75" class="pixelation-btn bg-green-600 hover:bg-green-700 text-white font-bold py-2 px-6 rounded-full transition-colors duration-200 shadow-lg" data-level="5">
+                    90%
+                </button>
+                <button id="pixelate50" class="pixelation-btn bg-yellow-600 hover:bg-yellow-700 text-white font-bold py-2 px-6 rounded-full transition-colors duration-200 shadow-lg" data-level="50">
+                    50%
+                </button>
+                <button id="pixelate25" class="pixelation-btn bg-red-600 hover:bg-red-700 text-white font-bold py-2 px-6 rounded-full transition-colors duration-200 shadow-lg" data-level="25">
+                    25%
+                </button>
+            </div>
+
+            <div class="flex justify-between text-sm mt-2 text-gray-400 w-full max-w-md">
+                <span id="pixelationValue">75% Pixelated</span>
+                <span id="pointsValue" class="font-bold text-green-400">10 Points</span>
+            </div>
+
+
+            <!-- Action Buttons -->
+            <div class="flex gap-4 mt-4">
+                <button id="nextImageButton" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-6 rounded-full transition-colors duration-200 shadow-lg">
+                    Next Image
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Array of sample images to cycle through.
+        const images = [
+            'https://i.postimg.cc/QM2Prnnd/sundar-pichai.jpg',
+            'https://placehold.co/600x400/33FF57/FFFFFF?text=App',
+            'https://placehold.co/600x400/3357FF/FFFFFF?text=Personality',
+        ];
+
+        let currentImageIndex = 0;
+        // This will hold the original, un-pixelated image in memory
+        const originalImage = new Image();
+        
+        // This is the fix for the SecurityError. It tells the browser to make
+        // a cross-origin request for the image, which prevents the canvas from being "tainted".
+        originalImage.crossOrigin = 'anonymous';
+
+        const imageElement = document.getElementById('gameImage');
+        const pixelationValue = document.getElementById('pixelationValue');
+        const pointsValue = document.getElementById('pointsValue');
+        const nextImageButton = document.getElementById('nextImageButton');
+
+        // This function now accepts a pixelation level as a parameter
+        function updatePixelation(level) {
+            // Create a temporary canvas
+            const canvas = document.createElement('canvas');
+            const ctx = canvas.getContext('2d');
+            
+            // The pixelation level is directly controlled by the button click
+            const pixelationLevel = 101 - level; 
+
+            // Set the canvas dimensions based on the pixelation level.
+            canvas.width = originalImage.width / pixelationLevel;
+            canvas.height = originalImage.height / pixelationLevel;
+
+            // Disable image smoothing to maintain a sharp, blocky look
+            ctx.imageSmoothingEnabled = false;
+
+            // Draw the original image onto the small canvas
+            ctx.drawImage(originalImage, 0, 0, canvas.width, canvas.height);
+
+            // Set the main image's source to the pixelated image from the canvas
+            imageElement.src = canvas.toDataURL('image/png');
+
+            // Update the display text and color based on the chosen level
+            let displayPoints = '';
+            let pointsColor = '';
+            
+            if (level === 90) {
+                displayPoints = '10 Points';
+                pointsColor = 'text-green-400';
+            } else if (level === 50) {
+                displayPoints = '8 Points';
+                pointsColor = 'text-yellow-400';
+            } else if (level === 25) {
+                displayPoints = '5 Points';
+                pointsColor = 'text-red-400';
+            }
+
+            pixelationValue.textContent = `${level}% Pixelated`;
+            pointsValue.textContent = displayPoints;
+            pointsValue.className = `font-bold ${pointsColor}`;
+        }
+
+        // Add event listeners to the new buttons
+        const pixelationButtons = document.querySelectorAll('.pixelation-btn');
+        pixelationButtons.forEach(button => {
+            button.addEventListener('click', (event) => {
+                const level = parseInt(event.target.dataset.level, 10);
+                updatePixelation(level);
+            });
+        });
+
+        // Event listener for the next image button
+        nextImageButton.addEventListener('click', () => {
+            currentImageIndex = (currentImageIndex + 1) % images.length;
+            
+            // Set the source of the originalImage object and update pixelation once it loads
+            originalImage.src = images[currentImageIndex];
+            
+            // Reset to the default 75% pixelation
+            updatePixelation(90);
+        });
+
+        // Initial setup on page load
+        window.onload = function() {
+            // Load the first image into the originalImage object
+            originalImage.onload = () => updatePixelation(75);
+            originalImage.src = images[currentImageIndex];
+        };
+    </script>
+</body>
+</html>
