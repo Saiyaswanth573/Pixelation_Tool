@@ -18,7 +18,7 @@
     <div class="bg-gray-800 rounded-2xl shadow-2xl p-8 max-w-4xl w-full">
         <!-- Game Title and Rules -->
         <div class="text-center mb-8">
-            <h1 class="text-4xl font-extrabold text-blue-400 mb-2">Guess the Personality</h1>
+            <h1 class="text-4xl font-extrabold text-blue-400 mb-2">Guess the Pixelated Image</h1>
             <p class="text-lg text-gray-400">A fun and challenging pixelation quiz.</p>
         </div>
 
@@ -29,9 +29,9 @@
                 <li>Each image starts at a high pixelation level.</li>
                 <li>Players have 30 seconds to buzz in.</li>
                 <li>If both teams fail to answer, the pixelation is reduced.</li>
-                <li><span class="font-bold text-green-400">10 Points:</span> 75% pixelated</li>
-                <li><span class="font-bold text-yellow-400">8 Points:</span> 50% pixelated</li>
-                <li><span class="font-bold text-red-400">5 Points:</span> 25% pixelated</li>
+                <li><span class="font-bold text-green-400">10 Points:</span> Level 3 pixelated</li>
+                <li><span class="font-bold text-yellow-400">8 Points:</span> Level 2 pixelated</li>
+                <li><span class="font-bold text-red-400">5 Points:</span> Level 1 pixelated</li>
             </ul>
         </div>
 
@@ -45,14 +45,17 @@
 
             <!-- Pixelation Control Buttons -->
             <div class="w-full max-w-md flex justify-center gap-4">
-                <button id="pixelate75" class="pixelation-btn bg-green-600 hover:bg-green-700 text-white font-bold py-2 px-6 rounded-full transition-colors duration-200 shadow-lg" data-level="5">
-                    90%
+                <button id="pixelate75" class="pixelation-btn bg-green-600 hover:bg-green-700 text-white font-bold py-2 px-6 rounded-full transition-colors duration-200 shadow-lg" data-level="94">
+                    Level 3
                 </button>
-                <button id="pixelate50" class="pixelation-btn bg-yellow-600 hover:bg-yellow-700 text-white font-bold py-2 px-6 rounded-full transition-colors duration-200 shadow-lg" data-level="50">
-                    50%
+                <button id="pixelate50" class="pixelation-btn bg-yellow-600 hover:bg-yellow-700 text-white font-bold py-2 px-6 rounded-full transition-colors duration-200 shadow-lg" data-level="96">
+                    Level 2
                 </button>
-                <button id="pixelate25" class="pixelation-btn bg-red-600 hover:bg-red-700 text-white font-bold py-2 px-6 rounded-full transition-colors duration-200 shadow-lg" data-level="25">
-                    25%
+                <button id="pixelate25" class="pixelation-btn bg-red-600 hover:bg-red-700 text-white font-bold py-2 px-6 rounded-full transition-colors duration-200 shadow-lg" data-level="97">
+                    Level 1
+                </button>
+                <button id="pixelate25" class="pixelation-btn bg-red-600 hover:bg-red-700 text-white font-bold py-2 px-6 rounded-full transition-colors duration-200 shadow-lg" data-level="100">
+                    Reveal
                 </button>
             </div>
 
@@ -75,8 +78,8 @@
         // Array of sample images to cycle through.
         const images = [
             'https://i.postimg.cc/QM2Prnnd/sundar-pichai.jpg',
-            'https://placehold.co/600x400/33FF57/FFFFFF?text=App',
-            'https://placehold.co/600x400/3357FF/FFFFFF?text=Personality',
+            'https://i.postimg.cc/BvDQB1Tm/Amazon-Echo.jpg',
+            'https://i.postimg.cc/FsCY5NJK/1-clipboard01er435435.jpg',
         ];
 
         let currentImageIndex = 0;
@@ -118,13 +121,16 @@
             let displayPoints = '';
             let pointsColor = '';
             
-            if (level === 90) {
+            if (level === 94) {
                 displayPoints = '10 Points';
                 pointsColor = 'text-green-400';
-            } else if (level === 50) {
+            } else if (level === 96) {
                 displayPoints = '8 Points';
                 pointsColor = 'text-yellow-400';
-            } else if (level === 25) {
+            } else if (level === 97) {
+                displayPoints = '5 Points';
+                pointsColor = 'text-red-400';
+            } else if (level === 100) {
                 displayPoints = '5 Points';
                 pointsColor = 'text-red-400';
             }
@@ -157,7 +163,7 @@
         // Initial setup on page load
         window.onload = function() {
             // Load the first image into the originalImage object
-            originalImage.onload = () => updatePixelation(75);
+            originalImage.onload = () => updatePixelation(95);
             originalImage.src = images[currentImageIndex];
         };
     </script>
