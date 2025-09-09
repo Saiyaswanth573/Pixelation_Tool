@@ -6,62 +6,52 @@
     <title>Pixelation Game</title>
     <!-- Load Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
+    <!-- JetBrains Mono font -->
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
     <style>
         /* This is the key to making the upscaled image look pixelated and not blurry */
         .pixelated-image {
             image-rendering: pixelated;
         }
+        body {
+            font-family: 'JetBrains Mono', monospace;
+        }
     </style>
 </head>
-<body class="bg-gray-900 text-gray-100 font-sans min-h-screen flex items-center justify-center p-4">
+<body class="bg-gray-900 text-gray-100 min-h-screen flex items-center justify-center p-4" style="background-image: url('https://i.postimg.cc/Dwr6G9qS/6020105.jpg'); background-size: cover; background-position: center; background-repeat: no-repeat;">
+    <!-- Top Left Logo -->
+    <img src="https://i.postimg.cc/yY4Km7Pj/image-2.png" alt="Logo Left" class="absolute top-7 left-8 w-24 h-24 object-contain z-50">
+    <!-- Top Right Logo -->
+    <img src="https://i.postimg.cc/jSvrYPr3/Whats-App-Image-2025-08-08-at-16-09-18-1a006d92.jpg" alt="Logo Right" class="absolute top-11 right-4 w-26 h-26 object-contain z-50">
 
-    <div class="bg-gray-800 rounded-2xl shadow-2xl p-8 max-w-4xl w-full">
+    <div class="bg-white-700 bg-opacity-100 backdrop-blur-sm rounded-3xl shadow-4xl p-8 max-w-3xl w-full border-2 border-blue-900">
         <!-- Game Title and Rules -->
         <div class="text-center mb-8">
-            <h1 class="text-4xl font-extrabold text-blue-400 mb-2">Guess the Pixelated Image</h1>
-            <p class="text-lg text-gray-400">A fun and challenging pixelation quiz.</p>
-        </div>
-
-        <div class="mb-8">
-            <h2 class="text-2xl font-bold mb-2 text-gray-200">Rules & Scoring</h2>
-            <ul class="list-disc list-inside text-gray-300 space-y-2">
-                <li>Total of 15 questions in the round.</li>
-                <li>Each image starts at a high pixelation level.</li>
-                <li>Players have 30 seconds to buzz in.</li>
-                <li>If both teams fail to answer, the pixelation is reduced.</li>
-                <li><span class="font-bold text-green-400">10 Points:</span> Level 3 pixelated</li>
-                <li><span class="font-bold text-yellow-400">8 Points:</span> Level 2 pixelated</li>
-                <li><span class="font-bold text-red-400">5 Points:</span> Level 1 pixelated</li>
-            </ul>
+            <h1 class="text-4xl font-extrabold text-blue-400 mb-2">Guess the Pixelated Image!</h1>
         </div>
 
         <!-- Image and Controls -->
         <div class="flex flex-col items-center justify-center gap-6">
 
             <!-- Image Container -->
-            <div class="w-full max-w-md h-96 bg-gray-700 rounded-xl overflow-hidden shadow-inner flex items-center justify-center">
+            <div class="w-full max-w-md h-96 bg-white-700 backdrop-blur-sm rounded-xl overflow-hidden shadow-inner flex items-center justify-center">
                 <img id="gameImage" class="pixelated-image w-full h-full object-contain" src="" alt="Quiz Image">
             </div>
 
             <!-- Pixelation Control Buttons -->
             <div class="w-full max-w-md flex justify-center gap-4">
-                <button id="pixelate75" class="pixelation-btn bg-green-600 hover:bg-green-700 text-white font-bold py-2 px-6 rounded-full transition-colors duration-200 shadow-lg" data-level="94">
+                <button id="pixelate75" class="pixelation-btn bg-green-600 hover:bg-green-700 text-white font-bold py-2 px-6 rounded-full transition-colors duration-200 shadow-lg whitespace-nowrap" data-level="80">
                     Level 3
                 </button>
-                <button id="pixelate50" class="pixelation-btn bg-yellow-600 hover:bg-yellow-700 text-white font-bold py-2 px-6 rounded-full transition-colors duration-200 shadow-lg" data-level="96">
+                <button id="pixelate50" class="pixelation-btn bg-yellow-600 hover:bg-yellow-700 text-white font-bold py-2 px-8 rounded-full transition-colors duration-200 shadow-lg whitespace-nowrap" data-level="85">
                     Level 2
                 </button>
-                <button id="pixelate25" class="pixelation-btn bg-red-600 hover:bg-red-700 text-white font-bold py-2 px-6 rounded-full transition-colors duration-200 shadow-lg" data-level="97">
+                    <button id="pixelate25" class="pixelation-btn bg-red-600 hover:bg-red-700 text-white font-bold py-2 px-8 rounded-full transition-colors duration-200 shadow-lg whitespace-nowrap" data-level="91">
                     Level 1
                 </button>
                 <button id="pixelate25" class="pixelation-btn bg-red-600 hover:bg-red-700 text-white font-bold py-2 px-6 rounded-full transition-colors duration-200 shadow-lg" data-level="100">
                     Reveal
                 </button>
-            </div>
-
-            <div class="flex justify-between text-sm mt-2 text-gray-400 w-full max-w-md">
-                <span id="pixelationValue">75% Pixelated</span>
-                <span id="pointsValue" class="font-bold text-green-400">10 Points</span>
             </div>
 
 
@@ -80,7 +70,7 @@
             'https://i.postimg.cc/PrnL0gbq/Screenshot-2025-09-09-184200.png',
             'https://i.postimg.cc/tgsCskdf/Screenshot-2025-09-09-184659.png',
             'https://i.postimg.cc/bNLkCfRK/optimus-prime-1.jpg',
-            '',
+            ''
         ];
 
         let currentImageIndex = 0;
@@ -122,13 +112,13 @@
             let displayPoints = '';
             let pointsColor = '';
             
-            if (level === 94) {
+            if (level === 80) {
                 displayPoints = '10 Points';
                 pointsColor = 'text-green-400';
-            } else if (level === 96) {
+            } else if (level === 85) {
                 displayPoints = '8 Points';
                 pointsColor = 'text-yellow-400';
-            } else if (level === 97) {
+            } else if (level === 90) {
                 displayPoints = '5 Points';
                 pointsColor = 'text-red-400';
             } else if (level === 100) {
@@ -158,13 +148,13 @@
             originalImage.src = images[currentImageIndex];
             
             // Reset to the default 75% pixelation
-            updatePixelation(90);
+            updatePixelation(80);
         });
 
         // Initial setup on page load
         window.onload = function() {
             // Load the first image into the originalImage object
-            originalImage.onload = () => updatePixelation(95);
+            originalImage.onload = () => updatePixelation(80);
             originalImage.src = images[currentImageIndex];
         };
     </script>
